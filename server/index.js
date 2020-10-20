@@ -24,6 +24,9 @@ startupjsServer({
       local: {
         hooks: {}
       }
+    },
+    createUser: (userData, authData, provider) => {
+      return { ...userData, email: provider.profile.email, isProfessor: provider.profile.isProfessor }
     }
   })
 
