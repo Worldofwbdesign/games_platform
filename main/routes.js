@@ -8,14 +8,20 @@ export default (components = {}) => [
     filters: [isLoggedIn]
   },
   {
-    path: '/auth/signup',
+    path: '/auth/sign-up/professor',
     exact: true,
     component: components.PSignUp
   },
   {
-    path: '/about',
+    path: '/library',
     exact: true,
-    component: components.PAbout,
+    component: components.PScenarios,
+    filters: [isLoggedIn]
+  },
+  {
+    path: '/scenario/:scenarioId',
+    exact: true,
+    component: components.PScenario,
     filters: [isLoggedIn]
   }
 ]
