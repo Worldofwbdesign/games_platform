@@ -1,43 +1,44 @@
 import React from 'react'
 import _ from 'lodash'
 import { observer } from 'startupjs'
-import { Div, TextInput, Br, Button, Span } from '@startupjs/ui'
+import { Div, TextInput, Br, Button, Span, H6 } from '@startupjs/ui'
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import './index.styl'
 
 const RolesList = observer(({ form, $form, onFormChange, formErrors }) => {
-  const handleAddRole = () => $form.set(`roles.${form.roles.length}`, '')
-  const handleRemoveRole = index => $form.set('roles', form.roles.filter((r, i) => i !== index))
+  const roles = form.roles || []
+  const handleAdd = () => $form.set(`roles.${roles.length}`, '')
+  const handleRemove = index => $form.set('roles', roles.filter((r, i) => i !== index))
 
   return pug`
     Div.root
-    for role, index in form.roles
-      Div.role(
-        key=index
-      )
-        TextInput.input(
-          onChangeText=onFormChange('roles.' + index)
-          label=index === 0 ? 'Roles' : ''
-          placeholder='Enter role name'
-          value=_.get(form, ['roles', index])
+      H6 Roles
+      for role, index in roles
+        Div.role(
+          key=index
         )
-        if index > 0
-          Button.removeRoleBtn(
-            icon=faTrash
-            color='error'
-            onPress=() => handleRemoveRole(index)
+          TextInput.input(
+            onChangeText=onFormChange('roles.' + index)
+            placeholder='Enter role name'
+            value=role
           )
-    if formErrors.roles
-      Br
-      Span.error
-        = formErrors.roles
-    Button.addRoleBtn(
-      variant='text'
-      color='primary'
-      icon=faPlus
-      onPress=handleAddRole
-    ) Add role
+          if index > 0
+            Button.removeBtn(
+              icon=faTrash
+              color='error'
+              onPress=() => handleRemove(index)
+            )
+      if formErrors.roles
+        Br
+        Span.error
+          = formErrors.roles
+      Button.addBtn(
+        variant='text'
+        color='primary'
+        icon=faPlus
+        onPress=handleAdd
+      ) Add role
   `
 })
 

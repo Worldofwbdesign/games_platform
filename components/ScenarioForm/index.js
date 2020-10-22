@@ -5,6 +5,7 @@ import { ActivityIndicator } from 'react-native'
 import { Div, TextInput, Br, Hr, Button, Span } from '@startupjs/ui'
 import TextInputWithError from '../TextInputWithError'
 import RolesList from './RolesList'
+import QuestionsList from './QuestionsList'
 
 import './index.styl'
 
@@ -16,14 +17,19 @@ const formRegexps = {
   roles: {
     func: roles => roles.every(role => !!role),
     error: 'Fill all roles or delete empty'
+  },
+  questions: {
+    func: questions => questions.every(role => !!role.text),
+    error: 'Fill all questions or delete empty'
   }
 }
 
 export const DEFAULT_VALUES = {
-  name: null,
-  description: null,
   rounds: '1',
-  roles: ['']
+  roles: [''],
+  questions: [{
+    text: ''
+  }]
 }
 
 const ScenarioForm = observer(({ scenarioId }) => {
@@ -34,7 +40,7 @@ const ScenarioForm = observer(({ scenarioId }) => {
 
   useEffect(() => {
     if (scenarioId !== 'new' && editingScenario) {
-      $form.set(_.omit(editingScenario, 'id'))
+      $form.setEach(_.omit(editingScenario, 'id'))
     }
   }, [editingScenario])
 
@@ -127,6 +133,13 @@ const ScenarioForm = observer(({ scenarioId }) => {
       Hr
 
       RolesList(
+        form=form
+        $form=$form
+        onFormChange=onFormChange
+        formErrors=formErrors
+      )
+
+      QuestionsList(
         form=form
         $form=$form
         onFormChange=onFormChange
