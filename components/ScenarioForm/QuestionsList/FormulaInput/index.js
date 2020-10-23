@@ -1,15 +1,14 @@
 import React from 'react'
 import { Div, TextInput } from '@startupjs/ui'
 
-const FormulaInput = ({ value, onChange }) => {
-  const handleChange = text => {
-    onChange(text)
-  }
-
+const FormulaInput = ({ value = '', variables = {}, onChangeText }) => {
   return pug`
     Div.root
       TextInput.input(
-        onChangeText=handleChange
+        multiline
+        resize
+        numberOfLines=4
+        onChangeText=onChangeText
         label='Formula'
         placeholder='Enter formula text'
         value=value

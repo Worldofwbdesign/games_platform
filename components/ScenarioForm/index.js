@@ -24,12 +24,16 @@ const formRegexps = {
   }
 }
 
+const DEFAULT_QUESTION = {
+  text: '',
+  options: [],
+  variables: []
+}
+
 export const DEFAULT_VALUES = {
   rounds: '1',
   roles: [''],
-  questions: [{
-    text: ''
-  }]
+  questions: [DEFAULT_QUESTION]
 }
 
 const ScenarioForm = observer(({ scenarioId }) => {
@@ -37,6 +41,8 @@ const ScenarioForm = observer(({ scenarioId }) => {
   const [loading, setLoading] = useState(false)
   const [form = DEFAULT_VALUES, $form] = usePage('form')
   const [editingScenario] = useDoc('gameScenarios', scenarioId)
+
+  console.info('form', form)
 
   useEffect(() => {
     if (scenarioId !== 'new' && editingScenario) {

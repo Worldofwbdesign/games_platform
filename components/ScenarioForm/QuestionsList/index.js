@@ -1,7 +1,9 @@
 import React from 'react'
 import { observer } from 'startupjs'
-import { Div, TextInput, Select, Br, Button, Span, H5 } from '@startupjs/ui'
+import { Div, TextInput, Select, Br, Hr, Button, Span, H5 } from '@startupjs/ui'
 import FormulaInput from './FormulaInput'
+import OptionsList from './OptionsList'
+import VariablesList from './VariablesList'
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
@@ -10,7 +12,7 @@ import './index.styl'
 const QuestionsList = observer(({ form, $form, onFormChange, formErrors }) => {
   const questions = form.questions || []
 
-  const handleAdd = () => $form.set(`questions.${questions.length}`, { text: '' })
+  const handleAdd = () => $form.set(`questions.${questions.length}`, { text: '', options: [] })
 
   const handleRemove = index => $form.set('questions', questions.filter((r, i) => i !== index))
 
@@ -23,10 +25,11 @@ const QuestionsList = observer(({ form, $form, onFormChange, formErrors }) => {
         Div.question(
           key=index
         )
+          - const questionKey = 'questions.' + index
           Span.label Question #{index + 1}
           Div.inputWrapp
             TextInput.input(
-              onChangeText=onFormChange('questions.' + index + '.text')
+              onChangeText=onFormChange(questionKey + '.text')
               placeholder='Enter question text'
               value=question.text
             )
@@ -40,14 +43,30 @@ const QuestionsList = observer(({ form, $form, onFormChange, formErrors }) => {
             Select.meta__item(
               label='For role'
               value=question.role
-              onChange=onFormChange('questions.' + index + '.role')
+              onChange=onFormChange(questionKey + '.role')
               options=form.roles
             )
+
+            Br
+            Span.label Answer options
+            OptionsList(
+              questionKey=questionKey
+            )
+
+            Br
+            Span.label Variables
+            VariablesList(
+              questionKey=questionKey
+            )
+
             Br
             FormulaInput(
               value=question.formula
-              onChange=onFormChange('questions.' + index + '.formula')
+              onChangeText=onFormChange(questionKey + '.formula')
+              variables=question.variables
             )
+        Br
+        Hr
               
       if formErrors.questions
         Br
