@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { observer, useQuery, useValue } from 'startupjs'
 import { Div, Pagination } from '@startupjs/ui'
-import { professorNamePipeline } from '../helpers'
+import { professorNamePipeline, gameScenarioPipeline } from '../helpers'
 import GameListItem from '../GameListItem'
 import { PAGE_SIZE } from '../constants'
 
@@ -17,7 +17,7 @@ const ProfessorGames = observer(({ user }) => {
         { $match: { professorId: userId, status: { $ne: 'finished' } } },
         {
           $facet: {
-            games: [{ $skip: page * PAGE_SIZE }, { $limit: PAGE_SIZE }, ...professorNamePipeline],
+            games: [{ $skip: page * PAGE_SIZE }, { $limit: PAGE_SIZE }, ...professorNamePipeline, ...gameScenarioPipeline],
             totalCount: [{ $count: 'count' }]
           }
         }

@@ -1,37 +1,94 @@
 import React from 'react'
 import _ from 'lodash'
 import { model, observer } from 'startupjs'
-import { Row, Div, H3, Button } from '@startupjs/ui'
-import PlayerCard from './PlayerCard'
-import { getPlayerStatus } from '../helpers'
+import { Div, H3, Button } from '@startupjs/ui'
+import GamePlayersList from './GamePlayersList'
+import GameGroupsList from './GameGroupsList'
+import { GAME_PLAYERS_SIZE } from '../constants'
 
 import './index.styl'
 
-const ProfessorGame = observer(({ userId, game, rounds, playersHash }) => {
+const formGroups = (roles, players) => {
+  const playersByRoles = _.groupBy(players, 'role')
+
+  const groups = new Array(Math.floor(players.length / GAME_PLAYERS_SIZE))
+    .fill('')
+    .map(() => new Array(GAME_PLAYERS_SIZE)
+      .fill('')
+      .map((p, index) => roles[index] || roles[0]))
+
+  return groups.map(roles => roles.map(role => playersByRoles[role].shift()))
+}
+
+const ProfessorGame = observer(({ game, $game, scenario, rounds, playersHash }) => {
+  const { status, players, groups } = game
+  const { roles } = scenario
   const currentRound = rounds[0]
   const stats = currentRound.stats
 
-  const handleNext = async () => {
-    await model.add('rounds', { gameId: game.id, round: currentRound.round + 1, stats: {} })
+  const handleCreateGroups = () => {
+    const groups = formGroups(roles, players)
+    console.info('groups', groups)
+    $game.setEach({
+      status: 'grouped',
+      groups,
+      players: _.flatten(groups)
+    })
   }
 
-  const handleFinish = async () => {
-    const [firstPlayerId, secondPlayerId] = Object.keys(currentRound.stats)
-    const [firstPlayerStats, secondPlayerStats] = Object.values(currentRound.stats)
+  const handleNext = async () => model.add('rounds', { gameId: game.id, round: currentRound.round + 1, stats: {} })
 
-    await model.setEach(`games.${game.id}`, {
-      status: 'finished',
-      stats: {
-        [firstPlayerId]: {
-          status: getPlayerStatus(firstPlayerStats.totalScore, secondPlayerStats.totalScore),
-          finalScore: firstPlayerStats.totalScore
-        },
-        [secondPlayerId]: {
-          status: getPlayerStatus(secondPlayerStats.totalScore, firstPlayerStats.totalScore),
-          finalScore: secondPlayerStats.totalScore
-        }
-      }
-    })
+  const handleStartGame = () => $game.setEach({ status: 'started' })
+
+  const handleFinish = async () => $game.setEach({
+    status: 'finished',
+    stats: {}
+  })
+
+  if (players.length < GAME_PLAYERS_SIZE) {
+    return pug`
+      H3.title Waiting for players
+    `
+  }
+
+  if (game.status === 'new') {
+    return pug`
+      Div.root
+        Button.btn(
+          disabled=players.length < 2
+          color="success"
+          onPress=handleCreateGroups
+        ) Create groups
+        H3.title Joined players
+        Div.gamePlayersList
+          GamePlayersList(
+            players=players
+            playersHash=playersHash
+          )
+    `
+  }
+
+  if (status === 'grouped') {
+    return pug`
+      Div.root
+        H3.title Groupes are formed!
+        Button.btn(
+          disabled=players.length < 2
+          color="success"
+          onPress=handleStartGame
+        ) Start Game
+        GameGroupsList(
+          groups=groups
+          playersHash=playersHash
+        )
+    `
+  }
+
+  if (status === 'started') {
+    return pug`
+      Div.root
+        H3.title Game started!
+    `
   }
 
   if (game.status === 'finished') {
@@ -43,13 +100,6 @@ const ProfessorGame = observer(({ userId, game, rounds, playersHash }) => {
   return pug`
     Div.root
       H3.title Round #{currentRound.round}
-      Row.cards
-        for playerId in game.players
-          PlayerCard(
-            key=playerId
-            playerName=_.get(playersHash, [playerId, 'name'])
-            playerStats=stats[playerId]
-          )
 
       Div.actions
         Button.btn(

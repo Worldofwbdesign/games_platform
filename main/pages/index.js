@@ -1,4 +1,5 @@
 export { default as PGames } from './PGames'
+export { default as PGame } from './PGame'
 export { default as PSignUp } from './PSignUp'
 export { default as PScenarios } from './PScenarios'
 export { default as PScenario } from './PScenario'

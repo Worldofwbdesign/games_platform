@@ -5,12 +5,14 @@ import { formatDate } from '../helpers'
 
 import './index.styl'
 
-const GameListItem = observer(({ user = {}, first, $game, game: { _id, name, professorName, players = [], _m: { ctime } } }) => {
+const chooseRole = (roles, currentPlayers = []) => roles[currentPlayers.length] || roles[currentPlayers.length % roles.length]
+
+const GameListItem = observer(({ user = {}, first, $game, game: { _id, name, professorName, players = [], status, scenario: { roles }, _m: { ctime } } }) => {
   const handleJoin = async () => {
-    if (players.length < 2 && !players.includes(user.id) && !user.isProfessor) {
+    if (!user.isProfessor && status === 'new' && !players.find(player => player.id === user.id)) {
       const $game = model.scope(`games.${_id}`)
       await model.fetch($game)
-      await $game.push('players', user.id)
+      await $game.push('players', { id: user.id, role: chooseRole(roles, players) })
       model.unfetch($game)
     }
     emit('url', `/game/${_id}`)

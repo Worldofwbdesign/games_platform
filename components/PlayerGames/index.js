@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { observer, useQuery, useValue } from 'startupjs'
 import { Div, Pagination } from '@startupjs/ui'
 import GameListItem from '../GameListItem'
-import { professorNamePipeline } from '../helpers'
+import { professorNamePipeline, gameScenarioPipeline } from '../helpers'
 import { PAGE_SIZE } from '../constants'
 
 import './index.styl'
@@ -18,21 +18,19 @@ const PlayerGames = observer(({ user }) => {
           $match: {
             $or: [
               { status: { $nin: ['started', 'finished'] } },
-              { players: userId, status: 'started' }
+              { 'players.id': userId, status: 'started' }
             ]
           }
         },
         {
           $facet: {
-            games: [{ $skip: page * PAGE_SIZE }, { $limit: PAGE_SIZE }, ...professorNamePipeline],
+            games: [{ $skip: page * PAGE_SIZE }, { $limit: PAGE_SIZE }, ...professorNamePipeline, ...gameScenarioPipeline],
             totalCount: [{ $count: 'count' }]
           }
         }
       ]
     }
   )
-
-  console.info()
 
   return pug`
     Div.root

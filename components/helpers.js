@@ -32,3 +32,17 @@ export const gamePlayersPipeline = [
     }
   }
 ]
+
+export const gameScenarioPipeline = [
+  {
+    $lookup: {
+      from: 'gameScenarios',
+      localField: 'scenarioId',
+      foreignField: '_id',
+      as: 'scenario'
+    }
+  },
+  {
+    $set: { scenario: { $arrayElemAt: ['$scenario', 0] } }
+  }
+]

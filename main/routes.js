@@ -8,6 +8,12 @@ export default (components = {}) => [
     filters: [isLoggedIn]
   },
   {
+    path: '/game/:gameId',
+    exact: true,
+    component: components.PGame,
+    filters: [isLoggedIn]
+  },
+  {
     path: '/auth/sign-up/professor',
     exact: true,
     component: components.PSignUp
