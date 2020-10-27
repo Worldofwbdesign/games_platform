@@ -16,8 +16,6 @@ const QuestionsList = observer(({ form, $form, onFormChange, formErrors }) => {
 
   const handleRemove = index => $form.set('questions', questions.filter((r, i) => i !== index))
 
-  console.info('questions', questions)
-
   return pug`
     Div.root
       H5 Questions

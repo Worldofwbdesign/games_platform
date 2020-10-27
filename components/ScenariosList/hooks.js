@@ -22,7 +22,7 @@ export const useCreateGame = () => {
           players: [],
           groups: []
         }),
-        model.add('rounds', { gameId: id, round: 1, stats: {} }))
+        model.add('rounds', { gameId: id, round: 1, currentQuestion: 0, stats: {} }))
       })
 
       await Promise.all(promises)

@@ -16,13 +16,10 @@ const PlayerGame = observer(({ userId, game, scenario, rounds }) => {
   const { questions } = scenario
   const { players } = game
   const currentRound = rounds[0]
-  const previousRound = rounds[1]
   const stats = currentRound.stats
-  const userPreviousRoundStats = _.get(previousRound, ['stats', userId], { totalScore: 0 })
-
-  const actionDone = currentRound && currentRound.stats[userId]
-
+  const userStats = currentRound.stats[userId]
   const userRole = useMemo(() => players.find(p => p.id === userId).role, [])
+  const userGroup = useMemo(() => game.groups.find(group => group.find(user => user.id === userId)), [])
 
   if (!currentRound) {
     return pug`
@@ -41,12 +38,14 @@ const PlayerGame = observer(({ userId, game, scenario, rounds }) => {
       H3.title Round #{currentRound.round}
       if currentRound.status === 'finished'
         H4.title Round finished! #{resultTextMap[stats[userId].status]}!
-      else if actionDone
+      else if !!userStats
         H4.title Waiting for another player!
       else
         H5.title Your turn!
         PlayerQuestions(
           questions=questions
+          currentRound=currentRound
+          userStats=userStats
           userRole=userRole
         )
   `
