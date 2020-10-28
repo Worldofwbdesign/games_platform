@@ -6,34 +6,34 @@ import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import './index.styl'
 
-const VariablesList = observer(({ questionKey }) => {
+const ConstantsList = observer(({ questionKey }) => {
   const [question, $question] = usePage(`form.${questionKey}`)
-  const variables = _.get(question, 'variables', [])
+  const constants = _.get(question, 'constants', [])
 
   const handleAdd = () => {
-    $question.set(`variables.${variables.length}`, { key: '', value: '' })
+    $question.set(`constants.${constants.length}`, { key: '', value: '' })
   }
-  const handleRemove = index => $question.set('variables', variables.filter((r, i) => i !== index))
+  const handleRemove = index => $question.set('constants', constants.filter((r, i) => i !== index))
 
-  const onChangeText = (index, key) => text => $question.set(`variables.${index}.${key}`, text)
+  const onChangeText = (index, key) => text => $question.set(`constants.${index}.${key}`, text)
 
   return pug`
     Div.root
-      for variable, index in variables
-        Div.variable(
+      for constant, index in constants
+        Div.constant(
           key=index
           styleName=[index ===0 && 'first']
         )
           TextInput.input(
             onChangeText=onChangeText(index, 'key')
-            placeholder='Enter variable key'
-            value=variable.key
+            placeholder='Enter constant key'
+            value=constant.key
           )
 
           TextInput.input.input--value(
             onChangeText=onChangeText(index, 'value')
             placeholder='Enter variable value'
-            value=variable.value
+            value=constant.value
           )
 
           Button.removeBtn(
@@ -49,8 +49,8 @@ const VariablesList = observer(({ questionKey }) => {
         color='primary'
         icon=faPlus
         onPress=handleAdd
-      ) Add variable
+      ) Add constant
   `
 })
 
-export default VariablesList
+export default ConstantsList

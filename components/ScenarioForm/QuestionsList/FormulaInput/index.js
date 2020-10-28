@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { Div, TextInput } from '@startupjs/ui'
 import VariablesSelect from './VariablesSelect'
 
-const FormulaInput = ({ value = '', variables = {}, onChangeText }) => {
+const FormulaInput = ({ value = '', constants = [], roles, onChangeText }) => {
   const inputRef = useRef(null)
 
   const handleInsertVariable = variable => {
@@ -26,7 +26,8 @@ const FormulaInput = ({ value = '', variables = {}, onChangeText }) => {
         value=value
       )
       VariablesSelect(
-        variables=variables
+        constants=constants
+        roles=roles
         onSelect=handleInsertVariable
       )
   `

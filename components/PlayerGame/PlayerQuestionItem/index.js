@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Div, TextInput, Select, Button } from '@startupjs/ui'
-import { useConfirm } from './hooks'
 
 import './index.styl'
 
@@ -8,7 +7,6 @@ const PlayerQuestionItem = ({ question, currentRound, userStats }) => {
   const { currentQuestion } = currentRound
   const { options = [] } = question
   const [value, setValue] = useState('')
-  const [loading, handleConfirm] = useConfirm({ question, currentRound, value })
 
   return pug`
     Div.root 
@@ -27,13 +25,6 @@ const PlayerQuestionItem = ({ question, currentRound, userStats }) => {
           value=value
           onChangeText=setValue
         )
-
-      Button.btn(
-        disabled=!value || _.get(userStats, ['answers', currentQuestion])
-        color="success"
-        onPress=handleConfirm
-      ) Confirm
-        
   `
 }
 

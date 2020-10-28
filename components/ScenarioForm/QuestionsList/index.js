@@ -3,7 +3,7 @@ import { observer } from 'startupjs'
 import { Div, TextInput, Select, Br, Hr, Button, Span, H5 } from '@startupjs/ui'
 import FormulaInput from './FormulaInput'
 import OptionsList from './OptionsList'
-import VariablesList from './VariablesList'
+import ConstantsList from './ConstantsList'
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
@@ -52,8 +52,8 @@ const QuestionsList = observer(({ form, $form, onFormChange, formErrors }) => {
             )
 
             Br
-            Span.label Variables
-            VariablesList(
+            Span.label Constants
+            ConstantsList(
               questionKey=questionKey
             )
 
@@ -61,7 +61,8 @@ const QuestionsList = observer(({ form, $form, onFormChange, formErrors }) => {
             FormulaInput(
               value=question.formula
               onChangeText=onFormChange(questionKey + '.formula')
-              variables=question.variables
+              constants=question.constants
+              roles=form.roles
             )
         Br
         Hr

@@ -16,12 +16,11 @@ const PGame = observer(props => {
   const [game, $game] = useDoc('games', gameId)
   const [scenario] = useDoc('gameScenarios', game.scenarioId)
   const [rounds] = useQuery('rounds', { gameId: game && game.id, $sort: { round: -1 }, $limit: 2 })
-  const [players] = useQuery('users', { _id: { $in: _.get(game, 'players', []).map(p => p.id) } })
+  const gamePlayerIds = _.get(game, 'players', []).map(p => p.id)
+  const [players] = useQuery('users', { _id: { $in: gamePlayerIds } })
   const playersHash = _.keyBy(players, 'id')
 
-  console.info('rounds', rounds)
-
-  if (!game) {
+  if (!game || (!user.isProfessor && !gamePlayerIds.includes(userId))) {
     return pug`
       H2.h2 Game not found!
     `

@@ -2,18 +2,17 @@ import React from 'react'
 import _ from 'lodash'
 import { model, observer } from 'startupjs'
 import { Div, H3, Button } from '@startupjs/ui'
-import GamePlayersList from './GamePlayersList'
+import GamePlayersList from 'components/GamePlayersList'
 import GameGroupsList from './GameGroupsList'
-import { GAME_PLAYERS_SIZE } from '../constants'
 
 import './index.styl'
 
 const formGroups = (roles, players) => {
   const playersByRoles = _.groupBy(players, 'role')
 
-  const groups = new Array(Math.floor(players.length / GAME_PLAYERS_SIZE))
+  const groups = new Array(Math.floor(players.length / roles.length))
     .fill('')
-    .map(() => new Array(GAME_PLAYERS_SIZE)
+    .map(() => new Array(roles.length)
       .fill('')
       .map((p, index) => roles[index] || roles[0]))
 
@@ -45,7 +44,7 @@ const ProfessorGame = observer(({ game, $game, scenario, rounds, playersHash }) 
     stats: {}
   })
 
-  if (players.length < GAME_PLAYERS_SIZE) {
+  if (players.length < roles.length) {
     return pug`
       H3.title Waiting for players
     `

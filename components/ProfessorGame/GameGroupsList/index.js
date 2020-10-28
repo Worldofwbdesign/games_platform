@@ -1,6 +1,6 @@
 import React from 'react'
 import { Card, Div, H4 } from '@startupjs/ui'
-import GamePlayerItem from '../GamePlayerItem'
+import GamePlayerItem from 'components/GamePlayersList/GamePlayerItem'
 
 import './index.styl'
 
