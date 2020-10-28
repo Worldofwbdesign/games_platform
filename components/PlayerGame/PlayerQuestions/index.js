@@ -1,28 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import _ from 'lodash'
-import { Div } from '@startupjs/ui'
+import { Div, Button } from '@startupjs/ui'
 import PlayerQuestionItem from '../PlayerQuestionItem'
 import { useConfirm } from './hooks'
 
 import './index.styl'
 
-const PlayerQuestions = ({ currentRound, questions = [], userStats, userRole, userGroup }) => {
-  const playerQuestions = questions.filter(q => !q.role || q.role === userRole)
-  const actualQuestion = playerQuestions[currentRound.currentQuestion]
-  const actualAnswer = _.get(userStats, ['answers', currentRound.currentQuestion], { text: '' })
-  const [loading, handleConfirm] = useConfirm({ question, currentRound, value })
+const PlayerQuestions = ({ userId, currentRound, questions = [], playerQuestions = [], userStats, userRole, userGroup }) => {
+  const [answers = [], setAnswers] = useState([])
+  const [loading, handleConfirm] = useConfirm({ userId, currentRound, answers, userGroup, questions })
+
+  console.info('answers', answers)
+
+  const onAnswerChange = index => text => {
+    const newAnswers = [...answers]
+    newAnswers[index] = text
+    setAnswers(newAnswers)
+  }
 
   return pug`
     Div.root
-      PlayerQuestionItem(
-        currentRound=currentRound
-        userStats=userStats
-        userGroup=userGroup
-        question=actualQuestion
-        answer=actualAnswer
-      )
+      each question, index in playerQuestions
+        PlayerQuestionItem(
+          key=index
+          currentRound=currentRound
+          userStats=userStats
+          userGroup=userGroup
+          question=question
+          value=answers[index]
+          onAnswerChange=onAnswerChange(index)
+        )
+
       Button.btn(
-        disabled=!value || loading
+        disabled=loading
         color="success"
         onPress=handleConfirm
       ) Next  

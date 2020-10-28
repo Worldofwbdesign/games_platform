@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
 import _ from 'lodash'
-import { model, observer, batch } from 'startupjs'
-import { Div, Row, H3, H4, H5, Button } from '@startupjs/ui'
+import { model, observer } from 'startupjs'
+import { Div, H3, H4, H5, Button } from '@startupjs/ui'
 import PlayerQuestions from './PlayerQuestions'
 import GamePlayersList from 'components/GamePlayersList'
+import PlayerAnswersList from 'components/PlayerAnswersList'
 
 import './index.styl'
 
@@ -20,7 +21,10 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) =>
   const stats = currentRound.stats
   const userStats = currentRound.stats[userId]
   const userRole = useMemo(() => players.find(p => p.id === userId).role, [players])
+  const playerQuestions = useMemo(() => questions.filter(q => !q.role || q.role === userRole), [])
   const userGroup = useMemo(() => game.groups.find(group => group.find(user => user.id === userId)), [game.groups])
+
+  const handleCancel = () => model.del(`rounds.${currentRound.id}.stats.${userId}.answers`)
 
   if (!currentRound) {
     return pug`
@@ -54,17 +58,34 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) =>
     `
   }
 
+  if (!!userStats && !!userStats.answers) {
+    return pug`
+      Div.root
+        H4.title Waiting for other players
+        H5.title Your answers:
+        Div.answers
+          PlayerAnswersList(
+            questions=playerQuestions
+            answers=userStats.answers
+          )
+        Button.btn(
+          color='error'
+          onPress=handleCancel
+        ) Cancel
+    `
+  }
+
   return pug`
     Div.root
       H3.title Round #{currentRound.round}
       if currentRound.status === 'finished'
         H4.title Round finished! #{resultTextMap[stats[userId].status]}!
-      else if !!userStats
-        H4.title Waiting for another player!
       else
         H5.title Your turn!
         PlayerQuestions(
+          userId=userId
           questions=questions
+          playerQuestions=playerQuestions
           currentRound=currentRound
           userStats=userStats
           userRole=userRole

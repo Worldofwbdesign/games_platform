@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
-import { Div, TextInput, Select, Button } from '@startupjs/ui'
+import React from 'react'
+import { Div, TextInput, Select } from '@startupjs/ui'
 
 import './index.styl'
 
-const PlayerQuestionItem = ({ question, currentRound, userStats }) => {
-  const { currentQuestion } = currentRound
+const PlayerQuestionItem = ({ question, value, onAnswerChange }) => {
   const { options = [] } = question
-  const [value, setValue] = useState('')
+
+  const onChange = newValue => {
+    onAnswerChange(newValue)
+  }
 
   return pug`
     Div.root 
@@ -15,7 +17,7 @@ const PlayerQuestionItem = ({ question, currentRound, userStats }) => {
           label=question.text
           placeholder='Enter answer'
           value=value
-          onChange=setValue
+          onChange=onChange
           options=options
         )
       else
@@ -23,7 +25,7 @@ const PlayerQuestionItem = ({ question, currentRound, userStats }) => {
           label=question.text
           placeholder='Enter answer'
           value=value
-          onChangeText=setValue
+          onChangeText=onChange
         )
   `
 }

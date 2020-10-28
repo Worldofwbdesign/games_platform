@@ -1,11 +1,5 @@
 import moment from 'moment'
 
-export function compileTemplate (template, data) {
-  return template.replace(/{{([\s\S]+?)}}/g, (match, value) => {
-    return data[value.trim()] || match
-  })
-}
-
 export const formatDate = timestamp => moment(timestamp).format('MMMM Do YYYY, h:mm:ss a')
 
 export const professorNamePipeline = [
