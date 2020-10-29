@@ -1,19 +1,31 @@
 import React from 'react'
-import { Div, Span } from '@startupjs/ui'
+import { Div, Span, Card, H5 } from '@startupjs/ui'
 
 import './index.styl'
 
-const PlayerAnswersList = ({ questions = [], answers = [], score }) => {
+const PlayerAnswersList = ({ questions = [], answers = [], playerName, score, totalScore }) => {
   return pug`
-    Div.root
+    Card.root
       each question, index in questions
         Div.item(
           key=index
         )
-          Span.question #{question.text}:
-          Span.asnwer= answers[index]
+          if playerName
+            H5.playerName= playerName
+          
+          Span.item
+            Span.label #{question.text}: 
+            Span.value= answers[index]
+            
           if score !== undefined
-            Span.score= score
+            Span.item
+              Span.label Score: 
+              Span.value= score
+          if totalScore !== undefined
+            Span.item
+              Span.label Total score: 
+              Span.value= totalScore
+
   `
 }
 

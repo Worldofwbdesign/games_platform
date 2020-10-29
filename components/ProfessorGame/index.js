@@ -1,9 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
-import { model, observer } from 'startupjs'
+import { observer, batch, model } from 'startupjs'
+import uuid from 'uuid/v4'
 import { Div, H3, Button } from '@startupjs/ui'
 import GamePlayersList from 'components/GamePlayersList'
 import GameGroupsList from './GameGroupsList'
+import GameResults from './GameResults'
 
 import './index.styl'
 
@@ -16,33 +18,28 @@ const formGroups = (roles, players) => {
       .fill('')
       .map((p, index) => roles[index] || roles[0]))
 
-  return groups.map(roles => roles.map(role => playersByRoles[role].shift()))
+  return groups.map(roles => ({ id: uuid(), players: roles.map(role => playersByRoles[role].shift()) }))
 }
 
-const ProfessorGame = observer(({ game, $game, scenario, rounds, playersHash }) => {
+const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
   const { status, players, groups } = game
   const { roles } = scenario
-  const currentRound = rounds[0]
-  const stats = currentRound.stats
 
   const handleCreateGroups = () => {
     const groups = formGroups(roles, players)
-    console.info('groups', groups)
-    $game.setEach({
-      status: 'grouped',
-      groups,
-      players: _.flatten(groups)
+    const promises = []
+
+    batch(() => {
+      promises.push($game.setEach({
+        status: 'grouped',
+        groups,
+        players: _.flatten(groups.map(g => g.players))
+      }))
+      promises.push(Promise.all(groups.map(group => model.add('rounds', { gameId: game.id, groupId: group.id, round: 1, stats: {} }))))
     })
   }
 
-  const handleNext = async () => model.add('rounds', { gameId: game.id, round: currentRound.round + 1, stats: {} })
-
   const handleStartGame = () => $game.setEach({ status: 'started' })
-
-  const handleFinish = async () => $game.setEach({
-    status: 'finished',
-    stats: {}
-  })
 
   if (players.length < roles.length) {
     return pug`
@@ -92,28 +89,15 @@ const ProfessorGame = observer(({ game, $game, scenario, rounds, playersHash }) 
 
   if (game.status === 'finished') {
     return pug`
-      H3.title Game is finished!
+      Div.root
+        H3.title Game is finished!
+        GameResults(
+          scenario=scenario
+          game=game
+          playersHash=playersHash
+        )
     `
   }
-
-  return pug`
-    Div.root
-      H3.title Round #{currentRound.round}
-
-      Div.actions
-        Button.btn(
-          disabled=currentRound.status !== 'finished'
-          color="warning"
-          onPress=handleFinish
-        ) Finish game
-
-        Button.btn(
-          disabled=currentRound.status !== 'finished'
-          color="success"
-          onPress=handleNext
-        ) Next Round
-
-  `
 })
 
 export default ProfessorGame

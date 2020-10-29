@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import _ from 'lodash'
-import { model, observer } from 'startupjs'
+import { useQuery, model, observer } from 'startupjs'
 import { Div, H3, H4, H5, Button } from '@startupjs/ui'
 import PlayerQuestions from './PlayerQuestions'
 import GamePlayersList from 'components/GamePlayersList'
 import PlayerAnswersList from 'components/PlayerAnswersList'
+import GroupAnswersList from 'components/GroupAnswersList'
 
 import './index.styl'
 
@@ -14,16 +15,18 @@ const resultTextMap = {
   lost: 'You lost'
 }
 
-const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) => {
-  const { questions } = scenario
+const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
+  const { questions, maxRounds } = scenario
   const { players } = game
-  const currentRound = rounds[0]
-  const previousRound = rounds[1]
-  const stats = currentRound.stats
-  const userStats = currentRound.stats[userId]
   const userRole = useMemo(() => players.find(p => p.id === userId).role, [players])
   const playerQuestions = useMemo(() => questions.filter(q => !q.role || q.role === userRole), [])
-  const userGroup = useMemo(() => game.groups.find(group => group.find(user => user.id === userId)), [game.groups])
+  const userGroup = useMemo(() => game.groups.find(group => group.players.find(user => user.id === userId)), [game.groups])
+
+  const [rounds = []] = useQuery('rounds', { gameId: game && game.id, groupId: userGroup && userGroup.id, $sort: { round: -1 }, $limit: 2 })
+  const currentRound = rounds[0]
+  const previousRound = rounds[1]
+  const stats = _.get(currentRound, 'stats', {})
+  const userStats = stats[userId]
 
   const handleCancel = () => model.del(`rounds.${currentRound.id}.stats.${userId}.answers`)
 
@@ -47,7 +50,7 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) =>
         H3.title Waiting to start the game!
         Div.content
           GamePlayersList(
-            players=userGroup
+            players=userGroup.players
             playersHash=playersHash
           )
     `
@@ -56,6 +59,12 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) =>
   if (game.status === 'finished') {
     return pug`
       H3.title Game is finished!
+        GroupAnswersList(
+          scenario=scenario
+          rounds=rounds
+          groupPlayers=userGroup.players
+          playersHash=playersHash
+        )
     `
   }
 
@@ -92,6 +101,7 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) =>
           userStats=userStats
           userRole=userRole
           userGroup=userGroup
+          maxRounds=maxRounds
         )
   `
 })

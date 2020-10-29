@@ -6,9 +6,9 @@ import { useConfirm } from './hooks'
 
 import './index.styl'
 
-const PlayerQuestions = ({ userId, currentRound, previousRound, questions = [], playerQuestions = [], userStats, userRole, userGroup }) => {
+const PlayerQuestions = ({ userId, currentRound, previousRound, questions = [], playerQuestions = [], userStats, userRole, userGroup, maxRounds }) => {
   const [answers = [], setAnswers] = useState([])
-  const [loading, handleConfirm] = useConfirm({ userId, currentRound, previousRound, questions, answers, userGroup })
+  const [loading, handleConfirm] = useConfirm({ userId, currentRound, previousRound, questions, answers, userGroup, maxRounds })
 
   const onAnswerChange = index => text => {
     const newAnswers = [...answers]
@@ -23,7 +23,6 @@ const PlayerQuestions = ({ userId, currentRound, previousRound, questions = [], 
           key=index
           currentRound=currentRound
           userStats=userStats
-          userGroup=userGroup
           question=question
           value=answers[index]
           onAnswerChange=onAnswerChange(index)

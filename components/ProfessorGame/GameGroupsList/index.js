@@ -12,7 +12,7 @@ const GameGroupsList = ({ groups = [], playersHash }) => {
           key=index
         )
           H4.title Group #{index + 1}
-          for player, index in group
+          for player, index in group.players
             GamePlayerItem(
               key=player.id
               player=player

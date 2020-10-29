@@ -10,7 +10,7 @@ import QuestionsList from './QuestionsList'
 import './index.styl'
 
 const formRegexps = {
-  rounds: {
+  maxRounds: {
     re: /^\d+$/,
     error: 'Should be a positive number'
   },
@@ -31,7 +31,7 @@ const DEFAULT_QUESTION = {
 }
 
 export const DEFAULT_VALUES = {
-  rounds: '1',
+  maxRounds: '1',
   roles: [''],
   questions: [DEFAULT_QUESTION]
 }
@@ -127,12 +127,12 @@ const ScenarioForm = observer(({ scenarioId }) => {
       )
       Br
       TextInputWithError.input(
-        onChangeText=onFormChange('rounds')
+        onChangeText=onFormChange('maxRounds')
         error=formErrors.rounds
         label='Rounds'
         name='rounds'
         placeholder='Enter scenario rounds'
-        value=form.rounds
+        value=form.maxRounds
       )
 
       Br

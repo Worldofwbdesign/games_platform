@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { model, useSession, batchModel } from 'startupjs'
+import { model, useSession } from 'startupjs'
 import uuid from 'uuid/v4'
 
 export const useCreateGame = () => {
@@ -9,23 +9,17 @@ export const useCreateGame = () => {
   const onCreate = async scenario => {
     try {
       setLoading(true)
-      const promises = []
       const id = uuid()
 
-      batchModel(() => {
-        promises.push(model.add('games', {
-          id,
-          scenarioId: scenario.id,
-          professorId: userId,
-          name: scenario.name,
-          status: 'new',
-          players: [],
-          groups: []
-        }),
-        model.add('rounds', { gameId: id, round: 1, stats: {} }))
+      await model.add('games', {
+        id,
+        scenarioId: scenario.id,
+        professorId: userId,
+        name: scenario.name,
+        status: 'new',
+        players: [],
+        groups: []
       })
-
-      await Promise.all(promises)
     } finally {
       setLoading(false)
     }
