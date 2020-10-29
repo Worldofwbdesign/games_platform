@@ -18,6 +18,7 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) =>
   const { questions } = scenario
   const { players } = game
   const currentRound = rounds[0]
+  const previousRound = rounds[1]
   const stats = currentRound.stats
   const userStats = currentRound.stats[userId]
   const userRole = useMemo(() => players.find(p => p.id === userId).role, [players])
@@ -87,6 +88,7 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario, rounds }) =>
           questions=questions
           playerQuestions=playerQuestions
           currentRound=currentRound
+          previousRound=previousRound
           userStats=userStats
           userRole=userRole
           userGroup=userGroup

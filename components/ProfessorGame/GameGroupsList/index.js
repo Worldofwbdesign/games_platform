@@ -8,7 +8,9 @@ const GameGroupsList = ({ groups = [], playersHash }) => {
   return pug`
     Card.root
       for group, index in groups
-        Div.group
+        Div.group(
+          key=index
+        )
           H4.title Group #{index + 1}
           for player, index in group
             GamePlayerItem(

@@ -23,7 +23,7 @@ const parseFormula = (formula, { user, constantsHash = {}, answersHash, round })
     return match
   })
 }
-const calculateRoundResults = ({ currentRound, userGroup, stats, questions }) => {
+const calculateRoundResults = ({ currentRound, previousRound, userGroup, stats, questions }) => {
   const { round } = currentRound
   const finalStats = {}
 
@@ -33,6 +33,7 @@ const calculateRoundResults = ({ currentRound, userGroup, stats, questions }) =>
   }, {})
 
   userGroup.forEach(user => {
+    const previousTotalScore = _.get(previousRound, ['stats', user.id, 'totalScore'], 0)
     let score = 0
     const userQuestions = questions.filter(q => (!q.role || q.role === user.role))
 
@@ -46,12 +47,13 @@ const calculateRoundResults = ({ currentRound, userGroup, stats, questions }) =>
       const parsedFormula = parseFormula(formula, { user, constantsHash, answersHash, round })
       console.info('parsedFormula', parsedFormula)
       const result = eval(parsedFormula)
-      score += result
+      score += isNaN(result) ? 0 : Number(result)
     })
 
     finalStats[user.id] = {
       ...stats[user.id],
-      score
+      score,
+      totalScore: previousTotalScore + score
     }
   })
 
@@ -69,7 +71,7 @@ const calculateRoundResults = ({ currentRound, userGroup, stats, questions }) =>
   return Promise.all(promises)
 }
 
-export const useConfirm = ({ userId, currentRound, answers, userGroup, questions }) => {
+export const useConfirm = ({ userId, currentRound, previousRound, questions, answers, userGroup }) => {
   const [loading, setLoading] = useState(false)
 
   const handleConfirm = async () => {
