@@ -6,9 +6,14 @@ import { useConfirm } from './hooks'
 
 import './index.styl'
 
-const PlayerQuestions = ({ userId, currentRound, previousRound, questions = [], playerQuestions = [], userStats, userRole, userGroup, maxRounds }) => {
+const PlayerQuestions = props => {
+  const {
+    currentRound,
+    playerQuestions = [],
+    userStats
+  } = props
   const [answers = [], setAnswers] = useState([])
-  const [loading, handleConfirm] = useConfirm({ userId, currentRound, previousRound, questions, answers, userGroup, maxRounds })
+  const [loading, handleConfirm] = useConfirm({ ...props, answers })
 
   const onAnswerChange = index => text => {
     const newAnswers = [...answers]

@@ -5,7 +5,8 @@ import { Div, H3, H4, H5, Button } from '@startupjs/ui'
 import PlayerQuestions from './PlayerQuestions'
 import GamePlayersList from 'components/GamePlayersList'
 import PlayerAnswersList from 'components/PlayerAnswersList'
-import GroupAnswersList from 'components/GroupAnswersList'
+import GroupAnswersList from './GroupAnswersList'
+import ValidationQuestion from './ValidationQuestion'
 
 import './index.styl'
 
@@ -56,13 +57,12 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
     `
   }
 
-  if (game.status === 'finished') {
+  if (userGroup.status === 'finished') {
     return pug`
       H3.title Game is finished!
         GroupAnswersList(
           scenario=scenario
-          rounds=rounds
-          groupPlayers=userGroup.players
+          group=userGroup
           playersHash=playersHash
         )
     `
@@ -85,6 +85,8 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
     `
   }
 
+  console.info('currentRound PlayerGame', currentRound)
+
   return pug`
     Div.root
       H3.title Round #{currentRound.round}
@@ -92,17 +94,25 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
         H4.title Round finished! #{resultTextMap[stats[userId].status]}!
       else
         H5.title Your turn!
-        PlayerQuestions(
-          userId=userId
-          questions=questions
-          playerQuestions=playerQuestions
-          currentRound=currentRound
-          previousRound=previousRound
-          userStats=userStats
-          userRole=userRole
-          userGroup=userGroup
-          maxRounds=maxRounds
-        )
+        if scenario.withValidation
+          ValidationQuestion(
+            scenario=scenario
+            currentRound=currentRound
+          )
+
+        if !scenario.withValidation || currentRound.validationValue
+          PlayerQuestions(
+            userId=userId
+            game=game
+            questions=questions
+            playerQuestions=playerQuestions
+            currentRound=currentRound
+            previousRound=previousRound
+            userStats=userStats
+            userRole=userRole
+            userGroup=userGroup
+            maxRounds=maxRounds
+          )
   `
 })
 

@@ -1107,6 +1107,17 @@
     prop-types "^15.7.2"
     qs "^6.9.4"
 
+"@dmapper/chat@^3.5.5":
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/@dmapper/chat/-/chat-3.5.5.tgz#ed93a5ca5cc9593e1cdd6f97189bffe8dab33603"
+  integrity sha512-UPOL6ClaPB4PxbCquNhwlUy9azElGrM5WbdDOuJ8HDq2JtfZ2+QF1q5pCSQ/VIEFFJF6IJjMWLdNQTy9PB2CBQ==
+  dependencies:
+    "@fortawesome/free-solid-svg-icons" "^5.12.0"
+    axios "^0.19.2"
+    lodash "^4.0.0"
+    moment "^2.0.0"
+    quill-delta-to-html "0.12.0"
+
 "@dmapper/stylus-hash-plugin@0.0.1", "@dmapper/stylus-hash-plugin@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@dmapper/stylus-hash-plugin/-/stylus-hash-plugin-0.0.1.tgz#844faab7604d7f5007abb3c410dba5d0814cef1d"
@@ -9502,7 +9513,7 @@ lodash.uniq@4.5.0, lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
-lodash@*, lodash@4.x, lodash@^4.11.2, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@~4.17.10:
+lodash@*, lodash@4.x, lodash@^4.0.0, lodash@^4.11.2, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@~4.17.10:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -12407,6 +12418,13 @@ querystringify@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
   integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
+
+quill-delta-to-html@0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/quill-delta-to-html/-/quill-delta-to-html-0.12.0.tgz#ee572cfa208390d99d7646795358ddb81eaea17c"
+  integrity sha512-Yy6U2e7ov+ZlrFbj5/GbqOBCRjyNu+vuphy0Pk+7668zIMTVHJglZY2JNa++1/zkSiqptPBmP/CpsDzC4Wznsw==
+  dependencies:
+    lodash.isequal "^4.5.0"
 
 quill-delta@^4.2.1:
   version "4.2.2"

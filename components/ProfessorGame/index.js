@@ -5,7 +5,7 @@ import uuid from 'uuid/v4'
 import { Div, H3, Button } from '@startupjs/ui'
 import GamePlayersList from 'components/GamePlayersList'
 import GameGroupsList from './GameGroupsList'
-import GameResults from './GameResults'
+import GameResults from 'components/GameResults'
 
 import './index.styl'
 
@@ -80,24 +80,19 @@ const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
     `
   }
 
-  if (status === 'started') {
-    return pug`
-      Div.root
+  return pug`
+    Div.root
+      if game.status === 'started'
         H3.title Game started!
-    `
-  }
-
-  if (game.status === 'finished') {
-    return pug`
-      Div.root
+      else
         H3.title Game is finished!
-        GameResults(
-          scenario=scenario
-          game=game
-          playersHash=playersHash
-        )
+        
+      GameResults(
+        scenario=scenario
+        game=game
+        playersHash=playersHash
+      )
     `
-  }
 })
 
 export default ProfessorGame

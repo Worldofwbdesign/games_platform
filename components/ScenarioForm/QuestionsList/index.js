@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer } from 'startupjs'
-import { Div, TextInput, Select, Br, Hr, Button, Span, H5 } from '@startupjs/ui'
+import { Div, TextInput, Select, Checkbox, Br, Hr, Button, Span, H5 } from '@startupjs/ui'
 import FormulaInput from './FormulaInput'
 import OptionsList from './OptionsList'
 import ConstantsList from './ConstantsList'

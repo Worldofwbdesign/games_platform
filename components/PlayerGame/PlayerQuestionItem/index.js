@@ -21,7 +21,7 @@ const PlayerQuestionItem = ({ question, value, onAnswerChange }) => {
           options=options
         )
       else
-        TextInput(
+        TextInput.input(
           label=question.text
           placeholder='Enter answer'
           value=value

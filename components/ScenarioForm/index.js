@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import _ from 'lodash'
 import { model, observer, usePage, emit, useDoc } from 'startupjs'
 import { ActivityIndicator } from 'react-native'
-import { Div, TextInput, Br, Hr, Button, Span } from '@startupjs/ui'
+import { Div, TextInput, Checkbox, Br, Hr, Button, Span } from '@startupjs/ui'
 import TextInputWithError from '../TextInputWithError'
 import RolesList from './RolesList'
 import QuestionsList from './QuestionsList'
@@ -13,6 +13,17 @@ const formRegexps = {
   maxRounds: {
     re: /^\d+$/,
     error: 'Should be a positive number'
+  },
+  validationRegex: {
+    func: str => {
+      try {
+        const regex = new RegExp(str)
+        regex.test('test')
+        return true
+      } catch (err) {
+        console.info(err)
+      }
+    }
   },
   roles: {
     func: roles => roles.every(role => !!role),
@@ -117,6 +128,7 @@ const ScenarioForm = observer(({ scenarioId }) => {
         placeholder='Enter scenario name'
         value=form.name || ''
       )
+
       Br
       TextInput.input(
         onChangeText=onFormChange('description')
@@ -125,6 +137,7 @@ const ScenarioForm = observer(({ scenarioId }) => {
         placeholder='Enter scenario description'
         value=form.description || ''
       )
+
       Br
       TextInputWithError.input(
         onChangeText=onFormChange('maxRounds')
@@ -134,6 +147,24 @@ const ScenarioForm = observer(({ scenarioId }) => {
         placeholder='Enter scenario rounds'
         value=form.maxRounds
       )
+
+      Br
+      Checkbox(
+        label='Need validation input?'
+        value=!!form.withValidation
+        onChange=onFormChange('withValidation')
+      )
+
+      if form.withValidation
+        Br
+        TextInputWithError.input(
+          onChangeText=onFormChange('validationRegex')
+          error=formErrors.validationRegex
+          label='Validation regex'
+          name='validationRegex'
+          placeholder='Enter validation regex'
+          value=form.validationRegex
+        )
 
       Br
       Hr

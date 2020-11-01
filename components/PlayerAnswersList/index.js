@@ -3,7 +3,7 @@ import { Div, Span, Card, H5 } from '@startupjs/ui'
 
 import './index.styl'
 
-const PlayerAnswersList = ({ questions = [], answers = [], playerName, score, totalScore }) => {
+const PlayerAnswersList = ({ questions = [], answers = [], playerName, role, score, totalScore }) => {
   return pug`
     Card.root
       each question, index in questions
@@ -11,7 +11,7 @@ const PlayerAnswersList = ({ questions = [], answers = [], playerName, score, to
           key=index
         )
           if playerName
-            H5.playerName= playerName
+            H5.playerName #{playerName} (#{role})
           
           Span.item
             Span.label #{question.text}: 

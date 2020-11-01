@@ -1,4 +1,5 @@
 import React from 'react'
+import _ from 'lodash'
 import { Div, Span } from '@startupjs/ui'
 
 import './index.styl'
@@ -10,7 +11,7 @@ const GamePlayerItem = ({ player, playersHash, first }) => pug`
   )
     Span.item
       Span.label Name: 
-      Span.value= playersHash[player.id].name
+      Span.value= _.get(playersHash[player.id], 'name')
 
     Span.item
       Span.label Role: 

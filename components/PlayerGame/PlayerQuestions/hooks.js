@@ -23,7 +23,7 @@ const parseFormula = (formula, { user, constantsHash = {}, answersHash, round })
     return match
   })
 }
-const calculateRoundResults = ({ currentRound, previousRound, userGroup, stats, questions, maxRounds }) => {
+const calculateRoundResults = ({ game, currentRound, previousRound, userGroup, stats, questions, maxRounds }) => {
   const { round } = currentRound
   const finalStats = {}
 
@@ -68,10 +68,21 @@ const calculateRoundResults = ({ currentRound, previousRound, userGroup, stats, 
       } else {
         const gameStats = Object.entries(finalStats)
           .reduce((acc, [userId, { totalScore }]) => Object.assign(acc, { [userId]: { totalScore } }), {})
-        promises.push(model.setEach(`games.${currentRound.gameId}`, {
-          status: 'finished',
-          stats: gameStats
-        }))
+
+        const userGroupIndex = game.groups.findIndex(g => g.id === userGroup.id)
+        const groups = [...game.groups]
+        groups[userGroupIndex].status = 'finished'
+
+        const newGameObj = {
+          stats: { ...(game.stats || {}), ...gameStats },
+          groups
+        }
+
+        if (groups.every(g => g.status === 'finished')) {
+          newGameObj.status = 'finished'
+        }
+
+        promises.push(model.setEach(`games.${currentRound.gameId}`, newGameObj))
       }
     }
   )
@@ -79,17 +90,27 @@ const calculateRoundResults = ({ currentRound, previousRound, userGroup, stats, 
   return Promise.all(promises)
 }
 
-export const useConfirm = ({ userId, currentRound, previousRound, questions, answers, userGroup, maxRounds }) => {
+export const useConfirm = ({
+  game,
+  userId,
+  userRole,
+  userGroup,
+  currentRound,
+  previousRound,
+  questions,
+  answers,
+  maxRounds
+}) => {
   const [loading, setLoading] = useState(false)
 
   const handleConfirm = async () => {
     try {
       setLoading(true)
       const { stats } = currentRound
-      const newStats = { ...stats, [userId]: { answers } }
+      const newStats = { ...stats, [userId]: { answers, role: userRole } }
 
       if (allGroupAnswered(userGroup.players, newStats)) {
-        await calculateRoundResults({ currentRound, previousRound, userGroup, stats: newStats, questions, maxRounds })
+        await calculateRoundResults({ game, currentRound, previousRound, userGroup, stats: newStats, questions, maxRounds })
       } else {
         await model.set(`rounds.${currentRound.id}.stats`, newStats)
       }

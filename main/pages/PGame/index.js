@@ -13,7 +13,7 @@ const PGame = observer(props => {
   const [userId] = useSession('userId')
   const [user] = useSession('user')
   const [game, $game] = useDoc('games', gameId)
-  const [scenario] = useDoc('gameScenarios', game.scenarioId)
+  const [scenario] = useDoc('gameScenarios', _.get(game, 'scenarioId'))
   const gamePlayerIds = _.get(game, 'players', []).map(p => p.id)
   const [players] = useQuery('users', { _id: { $in: gamePlayerIds } })
   const playersHash = _.keyBy(players, 'id')
