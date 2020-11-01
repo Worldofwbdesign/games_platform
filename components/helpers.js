@@ -20,7 +20,7 @@ export const gamePlayersPipeline = [
   {
     $lookup: {
       from: 'users',
-      localField: 'players',
+      localField: 'players.id',
       foreignField: '_id',
       as: 'players'
     }

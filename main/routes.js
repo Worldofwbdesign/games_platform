@@ -29,5 +29,11 @@ export default (components = {}) => [
     exact: true,
     component: components.PScenario,
     filters: [isLoggedIn]
+  },
+  {
+    path: '/gamesHistory',
+    exact: true,
+    component: components.PGamesHistory,
+    filters: [isLoggedIn]
   }
 ]

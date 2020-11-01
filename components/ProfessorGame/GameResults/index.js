@@ -6,12 +6,12 @@ import { PAGE_SIZE } from 'components/constants'
 
 import './index.styl'
 
-const GameResults = observer(({ game, scenario, playersHash }) => {
+const GameResults = observer(({ gameId, scenario, playersHash }) => {
   const [page, $page] = useValue(0)
   const [[{ rounds = [], totalCount } = {}] = []] = useQuery('rounds',
     {
       $aggregate: [
-        { $match: { gameId: game.id } },
+        { $match: { gameId } },
         {
           $facet: {
             rounds: [{ $skip: page * PAGE_SIZE }, { $limit: PAGE_SIZE }],
@@ -25,14 +25,15 @@ const GameResults = observer(({ game, scenario, playersHash }) => {
   return pug`
     Div.root
       each round in rounds
-        H4.title Round #{round.round}
         Div.round(
           key=round._id
         )
+          H4.title Round #{round.round}
           each userId in Object.keys(round.stats)
             - const userStats = round.stats[userId]
             - const playerQuestions = scenario.questions.filter(q => !q.role || q.role === userStats.role)
             PlayerAnswersList(
+              key=userId
               questions=playerQuestions
               playerName=playersHash[userId].name
               ...userStats

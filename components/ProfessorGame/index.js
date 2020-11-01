@@ -5,7 +5,7 @@ import uuid from 'uuid/v4'
 import { Div, H3, Button } from '@startupjs/ui'
 import GamePlayersList from 'components/GamePlayersList'
 import GameGroupsList from './GameGroupsList'
-import GameResults from 'components/GameResults'
+import GameResults from './GameResults'
 
 import './index.styl'
 
@@ -89,7 +89,7 @@ const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
         
       GameResults(
         scenario=scenario
-        game=game
+        gameId=game.id
         playersHash=playersHash
       )
     `
