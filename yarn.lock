@@ -1123,6 +1123,14 @@
   resolved "https://registry.yarnpkg.com/@dmapper/stylus-hash-plugin/-/stylus-hash-plugin-0.0.1.tgz#844faab7604d7f5007abb3c410dba5d0814cef1d"
   integrity sha512-jnhGSflJ+iiBmSIuG7lxPZrEgls33IEnv2V+PkxdjoMPXWNbJ3Y0CQC7qWxvNPpU9h50aezJgZRoUEPfTHcoHA==
 
+"@dmapper/time-sync@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@dmapper/time-sync/-/time-sync-1.0.3.tgz#6cde68a43d1bec5283c70829474c112e9a1f61c8"
+  integrity sha512-NdwCQfT/7hZa07AL42in4DhRduIp/7EV3dGcLjw/0EAl2Pp5nCM8SaapeENQzod3eCpMD8cBCP3MZQkKtT8m3g==
+  dependencies:
+    axios "^0.19.0"
+    local-storage-fallback "^4.0.0"
+
 "@fortawesome/fontawesome-common-types@^0.2.32":
   version "0.2.32"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.32.tgz#3436795d5684f22742989bfa08f46f50f516f259"
@@ -3304,7 +3312,7 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.10.1.tgz#e1e82e4f3e999e2cfd61b161280d16a111f86428"
   integrity sha512-zg7Hz2k5lI8kb7U32998pRRFin7zJlkfezGJjUc2heaD4Pw2wObakCDVzkKztTm/Ln7eiVvYsjqak0Ed4LkMDA==
 
-axios@^0.19.2:
+axios@^0.19.0, axios@^0.19.2:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
@@ -4730,6 +4738,11 @@ cookie@0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.0.tgz#beb437e7022b3b6d49019d088665303ebe9c14ba"
   integrity sha512-+Hp8fLp57wnUSt0tY0tHEXh4voZRDnoIrZPqlo3DPiI4y9lwg/jqx+1Om94/W6ZaPDOUbnjOt/99w66zk+l1Xg==
+
+cookie@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
+  integrity sha1-5+Ch+e9DtMi6klxcWpboBtFoc7s=
 
 cookies@~0.8.0:
   version "0.8.0"
@@ -9376,6 +9389,13 @@ loader-utils@^1.0.2, loader-utils@^1.1.0, loader-utils@^1.2.3, loader-utils@^1.4
     big.js "^5.2.2"
     emojis-list "^3.0.0"
     json5 "^1.0.1"
+
+local-storage-fallback@^4.0.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/local-storage-fallback/-/local-storage-fallback-4.1.1.tgz#6dc964635c8e9ab6d522d7d88538f465b62bd161"
+  integrity sha512-Ka4rem1FOgvIaPMokxXTP8DgW8gjfAQSdJC8TGrplDug7vh3b0PZnY/9euG3O3cIGAvJLp33mMU6MJ13x6S+Pw==
+  dependencies:
+    cookie "^0.3.1"
 
 locate-path@^2.0.0:
   version "2.0.0"
