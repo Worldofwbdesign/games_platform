@@ -20,8 +20,9 @@ const PSignUp = observer(() => {
             onPress=() => $registerProfessor.set(true)
           ) Register as Professor
           Button.btn(
+            color="sucess"
             onPress=() => emit('url', '/auth/sign-in')
-          ) Log in
+          ) Continue
   `
 })
 

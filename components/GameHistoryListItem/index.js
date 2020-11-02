@@ -27,7 +27,7 @@ const GameHistoryListItem = observer(({ user = {}, first, game }) => {
           Span.item__label= name
 
         Div.item
-          Span.item__key Pofessor: 
+          Span.item__key Professor: 
           Span.item__label= professorName
 
         each playerId in Object.keys(stats)

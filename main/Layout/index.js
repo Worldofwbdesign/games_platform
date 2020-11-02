@@ -22,7 +22,7 @@ export default observer(function ({ children }) {
   const [user] = useDoc('users', userId)
   console.info('userId', userId)
 
-  function renderSidebar () {
+  const renderSidebar = () => {
     return pug`
       Menu.sidebar
         MenuItem(url='/') Games

@@ -24,6 +24,7 @@
   "dependencies": {
     "@dmapper/auth": "^8.0.0",
     "@dmapper/chat": "^3.5.5",
+    "@dmapper/rich-text-editor": "^2.2.12",
     "@dmapper/time-sync": "^1.0.3",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@startupjs/ui": "^0.24.1",

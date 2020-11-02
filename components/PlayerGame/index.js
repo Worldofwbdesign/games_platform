@@ -1,20 +1,15 @@
 import React, { useMemo } from 'react'
 import _ from 'lodash'
-import { useQuery, model, observer } from 'startupjs'
-import { Div, H3, H4, H5, Button } from '@startupjs/ui'
+import { useQuery, observer } from 'startupjs'
+import { Div, H3, H4, H5 } from '@startupjs/ui'
+import PlayerNewGame from './PlayerNewGame'
+import PlayerGroupedGame from './PlayerGroupedGame'
+import GroupFinishedGame from './GroupFinishedGame'
+import WaitingPlayersGame from './WaitingPlayersGame'
 import PlayerQuestions from './PlayerQuestions'
-import GamePlayersList from 'components/GamePlayersList'
-import PlayerAnswersList from 'components/PlayerAnswersList'
-import GroupAnswersList from './GroupAnswersList'
 import ValidationQuestion from './ValidationQuestion'
 
 import './index.styl'
-
-const resultTextMap = {
-  draw: 'Draw',
-  win: 'You win',
-  lost: 'You lost'
-}
 
 const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
   const { questions, maxRounds } = scenario
@@ -29,90 +24,62 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
   const stats = _.get(currentRound, 'stats', {})
   const userStats = stats[userId]
 
-  const handleCancel = () => model.del(`rounds.${currentRound.id}.stats.${userId}.answers`)
+  return pug`
+    Div.root
+      if game.status === 'new'
+        PlayerNewGame(
+          userRole=userRole
+        )
 
-  if (!currentRound) {
-    return pug`
-      H3.title Game is not started!
-    `
-  }
+      else if !currentRound
+        H3.title Game is not started!
 
-  if (game.status === 'new') {
-    return pug`
-      Div.root
-        H3.title Waiting for group formation!
-        H4.title Your role - #{userRole}
-    `
-  }
+      else if game.status === 'grouped'
+        PlayerGroupedGame(
+          players=userGroup.players
+          playersHash=playersHash
+        )
 
-  if (game.status === 'grouped') {
-    return pug`
-      Div.root
-        H3.title Waiting to start the game!
-        Div.content
-          GamePlayersList(
-            players=userGroup.players
-            playersHash=playersHash
-          )
-    `
-  }
-
-  if (userGroup.status === 'finished') {
-    return pug`
-      H3.title Game is finished!
-        GroupAnswersList(
+      else if userGroup.status === 'finished'
+        GroupFinishedGame(
           scenario=scenario
           group=userGroup
           playersHash=playersHash
         )
-    `
-  }
 
-  if (!!userStats && !!userStats.answers) {
-    return pug`
-      Div.root
-        H4.title Waiting for other players
-        H5.title Your answers:
-        Div.answers
-          PlayerAnswersList(
-            questions=playerQuestions
-            answers=userStats.answers
-          )
-        Button.btn(
-          color='error'
-          onPress=handleCancel
-        ) Cancel
-    `
-  }
+      else if !!userStats && !!userStats.answers
+        WaitingPlayersGame(
+          userId=userId
+          currentRound=currentRound
+          playerQuestions=playerQuestions
+          userStats=userStats
+        )
 
-  console.info('currentRound PlayerGame', currentRound)
-
-  return pug`
-    Div.root
-      H3.title Round #{currentRound.round}
-      if currentRound.status === 'finished'
-        H4.title Round finished! #{resultTextMap[stats[userId].status]}!
       else
-        H5.title Your turn!
-        if scenario.withValidation
-          ValidationQuestion(
-            scenario=scenario
-            currentRound=currentRound
-          )
+        H3.title Round #{currentRound.round}
+        if currentRound.status === 'finished'
+          H4.title Round finished!
+        else
+          H5.title Your turn!
+          if scenario.withValidation
+            ValidationQuestion(
+              scenario=scenario
+              currentRound=currentRound
+            )
 
-        if !scenario.withValidation || currentRound.validationValue
-          PlayerQuestions(
-            userId=userId
-            game=game
-            questions=questions
-            playerQuestions=playerQuestions
-            currentRound=currentRound
-            previousRound=previousRound
-            userStats=userStats
-            userRole=userRole
-            userGroup=userGroup
-            maxRounds=maxRounds
-          )
+          if !scenario.withValidation || currentRound.validationValue
+            PlayerQuestions(
+              userId=userId
+              game=game
+              questions=questions
+              playerQuestions=playerQuestions
+              currentRound=currentRound
+              previousRound=previousRound
+              userStats=userStats
+              userRole=userRole
+              userGroup=userGroup
+              maxRounds=maxRounds
+            )
   `
 })
 
