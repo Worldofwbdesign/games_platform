@@ -3,6 +3,7 @@ import { observer, useValue, useDoc } from 'startupjs'
 import _ from 'lodash'
 import { Div, Span, Card } from '@startupjs/ui'
 import GameResults from 'components/ProfessorGame/GameResults'
+import GroupAnswersList from 'components/PlayerGame/GroupAnswersList'
 
 import './index.styl'
 
@@ -18,7 +19,7 @@ const GameHistoryListItem = observer(({ user = {}, first, game }) => {
   return pug`
     Card.root(
       styleName=[first && 'first']
-      onPress=() => $expand.set(true)
+      onPress=() => $expand.set(!expand)
     )
       Div.content
         Div.item
@@ -40,8 +41,14 @@ const GameHistoryListItem = observer(({ user = {}, first, game }) => {
         Div.expanded
           if user.isProfessor
             GameResults(
-              gameId=game._id
+              gameId=_id
               scenario=scenario
+              playersHash=playersHash
+            )
+          else
+            GroupAnswersList(
+              scenario=scenario
+              group=userGroup
               playersHash=playersHash
             )
   `
