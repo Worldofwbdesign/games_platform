@@ -20,7 +20,6 @@ export default observer(function ({ children }) {
   const [, $opened] = usePage('sidebarOpened')
   const [userId] = useSession('userId')
   const [user] = useDoc('users', userId)
-  console.info('userId', userId)
 
   const renderSidebar = () => {
     return pug`

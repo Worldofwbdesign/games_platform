@@ -18,8 +18,6 @@ const ValidationQuestion = observer(({ scenario, currentRound }) => {
     }
   }
 
-  console.info('currentRound ValidationQuestion', currentRound)
-
   return pug`
     Div.root
       if (showAlert)

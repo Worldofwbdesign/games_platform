@@ -25,7 +25,7 @@ const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
   const { status, players, groups } = game
   const { roles } = scenario
 
-  const handleCreateGroups = () => {
+  const handleCreateGroups = async () => {
     const groups = formGroups(roles, players)
     const promises = []
 
@@ -35,11 +35,17 @@ const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
         groups,
         players: _.flatten(groups.map(g => g.players))
       }))
-      promises.push(Promise.all(groups.map(group => model.add('rounds', { gameId: game.id, groupId: group.id, round: 1, stats: {} }))))
+      groups.forEach(group => {
+        const groupId = group.id
+        promises.push(model.add('rounds', { gameId: game.id, groupId, round: 1, stats: {} }))
+        promises.push(model.scope('chats').addNew('group', { groupId, userIds: group.players.map(p => p.id) }))
+      })
     })
+
+    await Promise.all(promises)
   }
 
-  const handleStartGame = () => $game.setEach({ status: 'started' })
+  const handleStartGame = () => $game.setEach({ status: 'started', startedAt: Date.now() })
 
   if (players.length < roles.length) {
     return pug`

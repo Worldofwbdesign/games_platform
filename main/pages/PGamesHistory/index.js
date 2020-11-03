@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'lodash'
 import { observer, useSession, useQuery } from 'startupjs'
 import { ScrollView } from 'react-native'
 import { Div, Content, H2 } from '@startupjs/ui'

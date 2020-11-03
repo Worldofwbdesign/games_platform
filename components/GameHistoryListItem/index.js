@@ -4,17 +4,16 @@ import _ from 'lodash'
 import { Div, Span, Card } from '@startupjs/ui'
 import GameResults from 'components/ProfessorGame/GameResults'
 import GroupAnswersList from 'components/PlayerGame/GroupAnswersList'
+import { formatDate } from 'components/helpers'
 
 import './index.styl'
 
 const GameHistoryListItem = observer(({ user = {}, first, game }) => {
-  const { _id, name, professorName, stats, players = [], groups } = game
+  const { _id, name, players = [], groups, startedAt, finishedAt, _m: { ctime } } = game
   const [expand, $expand] = useValue(false)
   const playersHash = useMemo(() => _.keyBy(players, '_id'), [players])
   const userGroup = useMemo(() => groups.find(group => group.players.find(u => u.id === user.id)), [groups])
   const [scenario] = useDoc('gameScenarios', _.get(game, 'scenarioId'))
-
-  const getPlayerName = playerId => players.find(player => player._id === playerId).name
 
   return pug`
     Card.root(
@@ -27,15 +26,16 @@ const GameHistoryListItem = observer(({ user = {}, first, game }) => {
           Span.item__label= name
 
         Div.item
-          Span.item__key Professor: 
-          Span.item__label= professorName
+          Span.item__key Created: 
+          Span.item__label= formatDate(ctime)
 
-        each playerId in Object.keys(stats)
-          Div.item(
-            key=playerId
-          )
-            Span.item__key #{getPlayerName(playerId)}: 
-            Span.item__label #{stats[playerId].totalScore}
+        Div.item
+          Span.item__key Started: 
+          Span.item__label= formatDate(startedAt)
+
+        Div.item
+          Span.item__key Finished: 
+          Span.item__label= formatDate(finishedAt)
 
       if expand
         Div.expanded

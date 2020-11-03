@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import _ from 'lodash'
 import { Div, Button } from '@startupjs/ui'
 import PlayerQuestionItem from '../PlayerQuestionItem'
 import { useConfirm } from './hooks'

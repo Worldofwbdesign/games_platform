@@ -1,5 +1,4 @@
 import React from 'react'
-import _ from 'lodash'
 import { observer } from 'startupjs'
 import { Div, TextInput, Br, Button, Span, H6 } from '@startupjs/ui'
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'

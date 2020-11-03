@@ -21,7 +21,7 @@ const formRegexps = {
         regex.test('test')
         return true
       } catch (err) {
-        console.info(err)
+        console.error(err)
       }
     }
   },
@@ -53,8 +53,6 @@ const ScenarioForm = observer(({ scenarioId }) => {
   const [form = DEFAULT_VALUES, $form] = usePage('form')
   const [editingScenario] = useDoc('gameScenarios', scenarioId)
 
-  console.info('form', form)
-
   useEffect(() => {
     if (scenarioId !== 'new' && editingScenario) {
       $form.setEach(_.omit(editingScenario, 'id'))
@@ -62,8 +60,6 @@ const ScenarioForm = observer(({ scenarioId }) => {
   }, [editingScenario])
 
   const onFormChange = field => value => {
-    console.info('field', field)
-    console.info('value', value)
     $form.set(field, value)
   }
 

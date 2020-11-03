@@ -45,7 +45,6 @@ const calculateRoundResults = ({ game, currentRound, previousRound, userGroup, s
       const answersHash = Object.entries(answersByRoles).reduce((acc, [role, answers]) => Object.assign(acc, { [role]: answers[index] }), {})
 
       const parsedFormula = parseFormula(formula, { user, constantsHash, answersHash, round })
-      console.info('parsedFormula', parsedFormula)
       const result = eval(parsedFormula)
       score += isNaN(result) ? 0 : Number(result)
     })
@@ -80,6 +79,7 @@ const calculateRoundResults = ({ game, currentRound, previousRound, userGroup, s
 
         if (groups.every(g => g.status === 'finished')) {
           newGameObj.status = 'finished'
+          newGameObj.finishedAt = Date.now()
         }
 
         promises.push(model.setEach(`games.${currentRound.gameId}`, newGameObj))
