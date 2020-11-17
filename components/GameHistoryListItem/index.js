@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { observer, useValue, useDoc } from 'startupjs'
+import { observer, useValue, useDoc, useSession } from 'startupjs'
 import _ from 'lodash'
 import { Div, Span, Card } from '@startupjs/ui'
 import GameResults from 'components/ProfessorGame/GameResults'
@@ -8,7 +8,8 @@ import { formatDate } from 'components/helpers'
 
 import './index.styl'
 
-const GameHistoryListItem = observer(({ user = {}, first, game }) => {
+const GameHistoryListItem = observer(({ first, game }) => {
+  const [user] = useSession('user')
   const { _id, name, players = [], groups, startedAt, finishedAt, _m: { ctime } } = game
   const [expand, $expand] = useValue(false)
   const playersHash = useMemo(() => _.keyBy(players, '_id'), [players])

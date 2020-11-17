@@ -27,7 +27,6 @@ const PGamesHistory = observer(() => {
             key=game._id
             first=index === 0
             game=game
-            user=user
           )
   `
 })

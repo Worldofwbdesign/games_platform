@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import { observer, useQuery, useValue } from 'startupjs'
+import { observer, useQuery, useValue, useSession } from 'startupjs'
 import { Div, Pagination } from '@startupjs/ui'
 import { professorNamePipeline, gameScenarioPipeline } from '../helpers'
 import GameListItem from '../GameListItem'
@@ -8,9 +8,10 @@ import { PAGE_SIZE } from '../constants'
 
 import './index.styl'
 
-const ProfessorGames = observer(({ user }) => {
+const ProfessorGames = observer(() => {
+  const [userId] = useSession('userId')
+
   const [page, $page] = useValue(0)
-  const userId = user.id
   const [[{ games = [], totalCount } = {}] = []] = useQuery('games',
     {
       $aggregate: [
@@ -33,7 +34,6 @@ const ProfessorGames = observer(({ user }) => {
             key=game._id
             first=index === 0
             game=game
-            user=user
           )
 
       Div.pagination

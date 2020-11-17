@@ -10,8 +10,6 @@ import './index.styl'
 const PGames = observer(() => {
   const [user] = useSession('user')
 
-  if (!user) return
-
   return pug`
     ScrollView.root
       Content.content
@@ -22,13 +20,9 @@ const PGames = observer(() => {
           ) Past games
 
         if user.isProfessor
-          ProfessorGames(
-            user=user
-          )
+          ProfessorGames
         else
-          PlayerGames(
-            user=user
-          )
+          PlayerGames
   `
 })
 
