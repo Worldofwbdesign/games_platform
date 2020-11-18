@@ -18,11 +18,15 @@ const PGame = observer(props => {
   const [scenario] = useDoc('gameScenarios', _.get(game, 'scenarioId'))
   const gamePlayerIds = _.get(game, 'players', []).map(p => p.id)
   const [players] = useQuery('users', { _id: { $in: gamePlayerIds } })
-  const playersHash = _.keyBy(players, 'id')
+  const [playersById, $playersById] = useSession(`playersById.${gameId}`)
 
   useEffect(() => {
     $chatOpened.set(false)
   }, [])
+
+  useEffect(() => {
+    if (!playersById) $playersById.set(_.keyBy(players, 'id'))
+  }, [players])
 
   const renderSidebar = () => {
     return pug`
@@ -61,7 +65,7 @@ const PGame = observer(props => {
                 game=game
                 $game=$game
                 scenario=scenario
-                playersHash=playersHash
+                playersById=playersById
               )
             else 
               PlayerGame(
@@ -69,7 +73,7 @@ const PGame = observer(props => {
                 game=game
                 $game=$game
                 scenario=scenario
-                playersHash=playersHash
+                playersById=playersById
               )
   `
 })

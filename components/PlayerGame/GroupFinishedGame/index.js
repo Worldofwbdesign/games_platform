@@ -4,13 +4,13 @@ import GroupAnswersList from '../GroupAnswersList'
 
 import './index.styl'
 
-const GroupFinishedGame = ({ scenario, group, playersHash }) => pug`
+const GroupFinishedGame = ({ scenario, group, playersById }) => pug`
   Div.root
     H3.title Game is finished!
     GroupAnswersList(
       scenario=scenario
       group=group
-      playersHash=playersHash
+      playersById=playersById
     )
 `
 

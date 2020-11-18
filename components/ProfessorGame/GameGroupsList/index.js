@@ -4,7 +4,7 @@ import GamePlayerItem from 'components/GamePlayersList/GamePlayerItem'
 
 import './index.styl'
 
-const GameGroupsList = ({ groups = [], playersHash }) => {
+const GameGroupsList = ({ groups = [] }) => {
   return pug`
     Card.root
       for group, index in groups
@@ -16,7 +16,6 @@ const GameGroupsList = ({ groups = [], playersHash }) => {
             GamePlayerItem(
               key=player.id
               player=player
-              playersHash=playersHash
               first=index === 0
             )
   `

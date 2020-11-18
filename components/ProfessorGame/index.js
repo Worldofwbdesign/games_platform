@@ -21,7 +21,7 @@ const formGroups = (roles, players) => {
   return groups.map(roles => ({ id: uuid(), players: roles.map(role => playersByRoles[role].shift()) }))
 }
 
-const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
+const ProfessorGame = observer(({ game, $game, scenario }) => {
   const { status, players, groups } = game
   const { roles } = scenario
 
@@ -65,7 +65,6 @@ const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
         Div.gamePlayersList
           GamePlayersList(
             players=players
-            playersHash=playersHash
           )
     `
   }
@@ -81,7 +80,6 @@ const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
         ) Start Game
         GameGroupsList(
           groups=groups
-          playersHash=playersHash
         )
     `
   }
@@ -96,7 +94,6 @@ const ProfessorGame = observer(({ game, $game, scenario, playersHash }) => {
       GameResults(
         scenario=scenario
         gameId=game.id
-        playersHash=playersHash
       )
     `
 })

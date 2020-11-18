@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { observer, useValue, useDoc, useSession } from 'startupjs'
 import _ from 'lodash'
 import { Div, Span, Card } from '@startupjs/ui'
@@ -10,11 +10,15 @@ import './index.styl'
 
 const GameHistoryListItem = observer(({ first, game }) => {
   const [user] = useSession('user')
+  const [playersById, $playersById] = useSession(`playersById.${game._id}`)
   const { _id, name, players = [], groups, startedAt, finishedAt, _m: { ctime } } = game
   const [expand, $expand] = useValue(false)
-  const playersHash = useMemo(() => _.keyBy(players, '_id'), [players])
   const userGroup = useMemo(() => groups.find(group => group.players.find(u => u.id === user.id)), [groups])
   const [scenario] = useDoc('gameScenarios', _.get(game, 'scenarioId'))
+
+  useEffect(() => {
+    $playersById.set(_.keyBy(players, '_id'))
+  }, [players])
 
   return pug`
     Card.root(
@@ -44,13 +48,12 @@ const GameHistoryListItem = observer(({ first, game }) => {
             GameResults(
               gameId=_id
               scenario=scenario
-              playersHash=playersHash
             )
           else
             GroupAnswersList(
               scenario=scenario
               group=userGroup
-              playersHash=playersHash
+              playersById=playersById
             )
   `
 })

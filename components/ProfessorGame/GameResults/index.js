@@ -1,13 +1,15 @@
 import React from 'react'
 import _ from 'lodash'
-import { observer, useQuery, useValue } from 'startupjs'
+import { observer, useQuery, useValue, useSession } from 'startupjs'
 import { Div, H4, Pagination } from '@startupjs/ui'
 import PlayerAnswersList from 'components/PlayerAnswersList'
 import { PAGE_SIZE } from 'components/constants'
 
 import './index.styl'
 
-const GameResults = observer(({ gameId, scenario, playersHash }) => {
+const GameResults = observer(({ gameId, scenario }) => {
+  const [playersById = {}] = useSession(`playersById.${gameId}`)
+
   const [page, $page] = useValue(0)
   const [[{ rounds = [], totalCount } = {}] = []] = useQuery('rounds',
     {
@@ -36,7 +38,7 @@ const GameResults = observer(({ gameId, scenario, playersHash }) => {
             PlayerAnswersList(
               key=userId
               questions=playerQuestions
-              playerName=playersHash[userId].name
+              playerName=playersById[userId].name
               ...userStats
             )
 

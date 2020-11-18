@@ -11,7 +11,7 @@ import ValidationQuestion from './ValidationQuestion'
 
 import './index.styl'
 
-const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
+const PlayerGame = observer(({ userId, playersById, game, scenario }) => {
   const { questions, maxRounds } = scenario
   const { players } = game
   const userRole = useMemo(() => players.find(p => p.id === userId).role, [players])
@@ -37,14 +37,14 @@ const PlayerGame = observer(({ userId, playersHash, game, scenario }) => {
       else if game.status === 'grouped'
         PlayerGroupedGame(
           players=userGroup.players
-          playersHash=playersHash
+          playersById=playersById
         )
 
       else if userGroup.status === 'finished'
         GroupFinishedGame(
           scenario=scenario
           group=userGroup
-          playersHash=playersHash
+          playersById=playersById
         )
 
       else if !!userStats && !!userStats.answers

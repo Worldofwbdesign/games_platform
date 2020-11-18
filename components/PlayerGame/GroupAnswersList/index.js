@@ -6,7 +6,7 @@ import { PAGE_SIZE } from 'components/constants'
 
 import './index.styl'
 
-const GroupAnswersList = observer(({ scenario, group, playersHash }) => {
+const GroupAnswersList = observer(({ scenario, group, playersById }) => {
   const { questions } = scenario
   const [page, $page] = useValue(0)
   const [[{ rounds = [], totalCount } = {}] = []] = useQuery('rounds',
@@ -38,7 +38,7 @@ const GroupAnswersList = observer(({ scenario, group, playersHash }) => {
             )
               PlayerAnswersList(
                 questions=playerQuestions
-                playerName=playersHash[userId].name
+                playerName=playersById[userId].name
                 ...userStats
               )
 

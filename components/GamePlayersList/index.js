@@ -4,14 +4,13 @@ import GamePlayerItem from './GamePlayerItem'
 
 import './index.styl'
 
-const GamePlayersList = ({ players = [], playersHash = {} }) => {
+const GamePlayersList = ({ players = [] }) => {
   return pug`
     Card.root
       for player, index in players
         GamePlayerItem(
           key=player.id
           player=player
-          playersHash=playersHash
           first=index === 0
         )
   `
