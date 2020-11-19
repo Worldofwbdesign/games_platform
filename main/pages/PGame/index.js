@@ -31,7 +31,6 @@ const PGame = observer(props => {
   const renderSidebar = () => {
     return pug`
       GroupChat(
-        userId=userId
         groups=game.groups
       )
     `
@@ -61,7 +60,6 @@ const PGame = observer(props => {
             H2.h2= game.name
             if user.isProfessor
               ProfessorGame(
-                userId=userId
                 game=game
                 $game=$game
                 scenario=scenario
@@ -69,7 +67,6 @@ const PGame = observer(props => {
               )
             else 
               PlayerGame(
-                userId=userId
                 game=game
                 $game=$game
                 scenario=scenario

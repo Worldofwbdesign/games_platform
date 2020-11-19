@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import _ from 'lodash'
-import { useQuery, observer } from 'startupjs'
+import { useQuery, observer, useSession } from 'startupjs'
 import { Div, H3, H4, H5 } from '@startupjs/ui'
 import PlayerNewGame from './PlayerNewGame'
 import PlayerGroupedGame from './PlayerGroupedGame'
@@ -11,7 +11,8 @@ import ValidationQuestion from './ValidationQuestion'
 
 import './index.styl'
 
-const PlayerGame = observer(({ userId, playersById, game, scenario }) => {
+const PlayerGame = observer(({ playersById, game, scenario }) => {
+  const [userId] = useSession('userId')
   const { questions, maxRounds } = scenario
   const { players } = game
   const userRole = useMemo(() => players.find(p => p.id === userId).role, [players])

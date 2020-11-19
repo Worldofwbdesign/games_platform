@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react'
 import _ from 'lodash'
-import { observer, useQuery } from 'startupjs'
+import { observer, useQuery, useSession } from 'startupjs'
 import { Div, H5 } from '@startupjs/ui'
 import { Chat } from '@dmapper/chat'
 
 import './index.styl'
 
-const GroupChat = observer(({ userId, groups }) => {
+const GroupChat = observer(({ groups }) => {
+  const [userId] = useSession('userId')
   const userGroup = useMemo(() => groups.find(group => group.players.find(user => user.id === userId)), [groups])
   const groupId = userGroup && userGroup.id
   const [chats] = useQuery('chats', { groupId })
