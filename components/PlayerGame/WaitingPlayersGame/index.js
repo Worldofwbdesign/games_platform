@@ -1,11 +1,12 @@
 import React from 'react'
-import { model, observer } from 'startupjs'
+import { model, observer, useSession } from 'startupjs'
 import { Div, H4, H5, Button } from '@startupjs/ui'
 import PlayerAnswersList from 'components/PlayerAnswersList'
 
 import './index.styl'
 
-const WaitingPlayersGame = observer(({ userId, currentRound, playerQuestions, userStats }) => {
+const WaitingPlayersGame = observer(({ currentRound, playerQuestions, userStats }) => {
+  const [userId] = useSession('userId')
   const handleCancel = () => model.del(`rounds.${currentRound.id}.stats.${userId}.answers`)
 
   return pug`

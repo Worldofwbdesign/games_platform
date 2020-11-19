@@ -49,7 +49,6 @@ const PlayerGame = observer(({ userId, playersById, game, scenario }) => {
 
       else if !!userStats && !!userStats.answers
         WaitingPlayersGame(
-          userId=userId
           currentRound=currentRound
           playerQuestions=playerQuestions
           userStats=userStats
@@ -69,7 +68,6 @@ const PlayerGame = observer(({ userId, playersById, game, scenario }) => {
 
           if !scenario.withValidation || currentRound.validationValue
             PlayerQuestions(
-              userId=userId
               game=game
               questions=questions
               playerQuestions=playerQuestions
