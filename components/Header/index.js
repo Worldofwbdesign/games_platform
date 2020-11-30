@@ -6,7 +6,7 @@ import { faBars, faComments } from '@fortawesome/free-solid-svg-icons'
 
 import './index.styl'
 
-const Header = observer(props => {
+const Header = observer(() => {
   const [sidebarOpened, $sidebarOpened] = usePage('sidebarOpened')
   const [render] = useLocal('$render')
   const [chatOpened, $chatOpened] = usePage('chatSidebarOpened')

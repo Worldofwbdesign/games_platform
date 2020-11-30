@@ -7,7 +7,9 @@ import './index.styl'
 
 const WaitingPlayersGame = observer(({ currentRound, playerQuestions, userStats }) => {
   const [userId] = useSession('userId')
-  const handleCancel = () => model.del(`rounds.${currentRound.id}.stats.${userId}.answers`)
+  const $round = model.at(`rounds.${currentRound.id}`)
+
+  const handleCancel = () => $round.clearRoundStats(userId)
 
   return pug`
     Div.root
