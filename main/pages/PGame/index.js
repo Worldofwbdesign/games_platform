@@ -14,7 +14,7 @@ const PGame = observer(props => {
   const [userId] = useSession('userId')
   const [user] = useSession('user')
   const [, $chatOpened] = usePage('chatSidebarOpened')
-  const [game, $game] = useDoc('games', gameId)
+  const [game] = useDoc('games', gameId)
   const [scenario] = useDoc('gameScenarios', _.get(game, 'scenarioId'))
   const gamePlayerIds = _.get(game, 'players', []).map(p => p.id)
   const [players] = useQuery('users', { _id: { $in: gamePlayerIds } })
@@ -60,17 +60,11 @@ const PGame = observer(props => {
             H2.h2= game.name
             if user.isProfessor
               ProfessorGame(
-                game=game
-                $game=$game
                 scenario=scenario
-                playersById=playersById
               )
             else 
               PlayerGame(
-                game=game
-                $game=$game
                 scenario=scenario
-                playersById=playersById
               )
   `
 })

@@ -1,6 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
-import { observer, batch, model } from 'startupjs'
+import { observer, batch, model, useLocal, useDoc } from 'startupjs'
 import uuid from 'uuid/v4'
 import { Div, H3, Button } from '@startupjs/ui'
 import GamePlayersList from 'components/GamePlayersList'
@@ -21,7 +21,9 @@ const formGroups = (roles, players) => {
   return groups.map(roles => ({ id: uuid(), players: roles.map(role => playersByRoles[role].shift()) }))
 }
 
-const ProfessorGame = observer(({ game, $game, scenario }) => {
+const ProfessorGame = observer(({ scenario }) => {
+  const [gameId] = useLocal('$render.params.gameId')
+  const [game, $game] = useDoc('games', gameId)
   const { status, players, groups } = game
   const { roles } = scenario
 

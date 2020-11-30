@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import _ from 'lodash'
-import { useQuery, observer, useSession } from 'startupjs'
+import { useQuery, observer, useSession, useLocal, useDoc } from 'startupjs'
 import { Div, H3, H4, H5 } from '@startupjs/ui'
 import PlayerNewGame from './PlayerNewGame'
 import PlayerGroupedGame from './PlayerGroupedGame'
@@ -11,8 +11,10 @@ import ValidationQuestion from './ValidationQuestion'
 
 import './index.styl'
 
-const PlayerGame = observer(({ playersById, game, scenario }) => {
+const PlayerGame = observer(({ scenario }) => {
   const [userId] = useSession('userId')
+  const [gameId] = useLocal('$render.params.gameId')
+  const [game] = useDoc('games', gameId)
   const { questions, maxRounds } = scenario
   const { players } = game
   const userRole = useMemo(() => players.find(p => p.id === userId).role, [players])
@@ -38,14 +40,12 @@ const PlayerGame = observer(({ playersById, game, scenario }) => {
       else if game.status === 'grouped'
         PlayerGroupedGame(
           players=userGroup.players
-          playersById=playersById
         )
 
       else if userGroup.status === 'finished'
         GroupFinishedGame(
           scenario=scenario
           group=userGroup
-          playersById=playersById
         )
 
       else if !!userStats && !!userStats.answers
