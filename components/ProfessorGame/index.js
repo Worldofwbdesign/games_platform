@@ -37,7 +37,7 @@ const ProfessorGame = observer(({ game, $game, scenario }) => {
       }))
       groups.forEach(group => {
         const groupId = group.id
-        promises.push(model.add('rounds', { gameId: game.id, groupId, round: 1, stats: {} }))
+        promises.push(model.scope('rounds').add({ gameId: game.id, groupId, round: 1 }))
         promises.push(model.scope('chats').addNew('group', { groupId, userIds: group.players.map(p => p.id) }))
       })
     })

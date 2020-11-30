@@ -9,6 +9,7 @@ import './index.styl'
 
 const GameResults = observer(({ gameId, scenario }) => {
   const [playersById = {}] = useSession(`playersById.${gameId}`)
+  console.info('playersById', playersById)
 
   const [page, $page] = useValue(0)
   const [[{ rounds = [], totalCount } = {}] = []] = useQuery('rounds',

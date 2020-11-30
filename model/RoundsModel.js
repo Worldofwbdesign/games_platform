@@ -1,8 +1,11 @@
 import { BaseModel } from 'startupjs/orm'
 
-export default class RoundModel extends BaseModel {
-  setStats (stats) {
-    this.set('stats', stats)
+export default class RoundsModel extends BaseModel {
+  add (round) {
+    this.root.add({
+      ...round,
+      stats: {}
+    })
   }
 
   clearUserStats (userId) {

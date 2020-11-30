@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { model, batch } from 'startupjs'
+import { model, batch, useSession } from 'startupjs'
 import _ from 'lodash'
 
 export const variableRegex = /{{([\s\S]+?)}}/g
@@ -60,10 +60,10 @@ const calculateRoundResults = ({ game, currentRound, previousRound, userGroup, s
 
   batch(
     () => {
-      promises.push(model.set(`rounds.${currentRound.id}.stats`, finalStats))
+      promises.push(model.scope(`rounds.${currentRound.id}`).setStats(finalStats))
 
       if (currentRound.round < maxRounds) {
-        promises.push(model.add('rounds', { gameId: currentRound.gameId, groupId: userGroup.id, round: round + 1, stats: {} }))
+        promises.push(model.scope('rounds').add({ gameId: currentRound.gameId, groupId: userGroup.id, round: round + 1 }))
       } else {
         const gameStats = Object.entries(finalStats)
           .reduce((acc, [userId, { totalScore }]) => Object.assign(acc, { [userId]: { totalScore } }), {})
@@ -92,7 +92,6 @@ const calculateRoundResults = ({ game, currentRound, previousRound, userGroup, s
 
 export const useConfirm = ({
   game,
-  userId,
   userRole,
   userGroup,
   currentRound,
@@ -101,6 +100,7 @@ export const useConfirm = ({
   answers,
   maxRounds
 }) => {
+  const [userId] = useSession('userId')
   const [loading, setLoading] = useState(false)
 
   const handleConfirm = async () => {
@@ -112,7 +112,7 @@ export const useConfirm = ({
       if (allGroupAnswered(userGroup.players, newStats)) {
         await calculateRoundResults({ game, currentRound, previousRound, userGroup, stats: newStats, questions, maxRounds })
       } else {
-        await model.set(`rounds.${currentRound.id}.stats`, newStats)
+        await model.scope(`rounds.${currentRound.id}`).setStats(newStats)
       }
       setLoading(false)
     } catch (err) {

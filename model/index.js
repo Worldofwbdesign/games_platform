@@ -9,6 +9,7 @@ import BaseVoteModel from '@dmapper/chat/model/BaseVoteModel'
 
 import GameModel from './GameModel'
 import RoundModel from './RoundModel'
+import RoundsModel from './RoundsModel'
 
 export default function (racer) {
   racer.orm('chats', BaseChatsModel)
@@ -21,4 +22,5 @@ export default function (racer) {
   racer.orm('votes.*', BaseVoteModel)
   racer.orm('games', GameModel)
   racer.orm('rounds.*', RoundModel)
+  racer.orm('rounds', RoundsModel)
 }
