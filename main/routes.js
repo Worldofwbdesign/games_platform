@@ -31,7 +31,7 @@ export default (components = {}) => [
     filters: [isLoggedIn]
   },
   {
-    path: '/gamesHistory',
+    path: '/games-history',
     exact: true,
     component: components.PGamesHistory,
     filters: [isLoggedIn]

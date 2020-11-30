@@ -1,16 +1,23 @@
 import React from 'react'
-import { observer } from 'startupjs'
+import { observer, usePage } from 'startupjs'
 import { Div, TextInput, Select, Br, Hr, Button, Span, H5 } from '@startupjs/ui'
 import FormulaInput from './FormulaInput'
 import OptionsList from './OptionsList'
 import ConstantsList from './ConstantsList'
+import { DEFAULT_VALUES } from '../'
 
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import './index.styl'
 
-const QuestionsList = observer(({ form, $form, onFormChange, formErrors }) => {
+const QuestionsList = observer(() => {
+  const [formErrors = {}] = usePage('formErrors')
+  const [form = DEFAULT_VALUES, $form] = usePage('form')
   const questions = form.questions || []
+
+  const onFormChange = field => value => {
+    $form.set(field, value)
+  }
 
   const handleAdd = () => $form.set(`questions.${questions.length}`, { text: '', options: [] })
 

@@ -48,7 +48,7 @@ export const DEFAULT_VALUES = {
 }
 
 const ScenarioForm = observer(({ scenarioId }) => {
-  const [formErrors, setFormErrors] = useState({})
+  const [formErrors = {}, $formErrors] = usePage('formErrors')
   const [loading, setLoading] = useState(false)
   const [form = DEFAULT_VALUES, $form] = usePage('form')
   const [editingScenario] = useDoc('gameScenarios', scenarioId)
@@ -88,13 +88,13 @@ const ScenarioForm = observer(({ scenarioId }) => {
       errors[fieldName] = error
     })
 
-    setFormErrors(errors)
+    $formErrors.set(errors)
 
     return isFormValid
   }
 
   const handleSubmit = async () => {
-    setFormErrors({})
+    $formErrors.set({})
 
     if (!validateFields()) {
       return
@@ -111,7 +111,7 @@ const ScenarioForm = observer(({ scenarioId }) => {
       emit('url', '/library')
     } catch (error) {
       setLoading(false)
-      setFormErrors({ saveError: error.message })
+      $formErrors.set({ saveError: error.message })
     }
   }
 
@@ -165,19 +165,8 @@ const ScenarioForm = observer(({ scenarioId }) => {
       Br
       Hr
 
-      RolesList(
-        form=form
-        $form=$form
-        onFormChange=onFormChange
-        formErrors=formErrors
-      )
-
-      QuestionsList(
-        form=form
-        $form=$form
-        onFormChange=onFormChange
-        formErrors=formErrors
-      )
+      RolesList
+      QuestionsList
 
       if formErrors.saveError
         Br

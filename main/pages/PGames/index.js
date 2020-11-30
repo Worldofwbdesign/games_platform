@@ -16,7 +16,7 @@ const PGames = observer(() => {
         Div.header
           H2.h2 Games
           Button.btn(
-            onPress=() => emit('url', '/gamesHistory')
+            onPress=() => emit('url', '/games-history')
           ) Past games
 
         if user.isProfessor

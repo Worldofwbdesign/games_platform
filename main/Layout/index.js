@@ -25,7 +25,7 @@ export default observer(function ({ children }) {
     return pug`
       Menu.sidebar
         MenuItem(url='/') Games
-        MenuItem(url='/gamesHistory') Past games
+        MenuItem(url='/games-history') Past games
         if user && user.isProfessor
           MenuItem(url='/library') Library
     `
